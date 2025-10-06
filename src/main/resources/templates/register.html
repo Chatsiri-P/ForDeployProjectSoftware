@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{fragments/head :: head}"></div>
+<body
+	class="d-flex align-items-center justify-content-center min-vh-100"
+	style="background: linear-gradient(90deg, #921ffa, #009297);">
+	<section class="container my-5" style="max-width: 500px;">
+		<div class="card shadow-sm rounded-4">
+		<div class="position-absolute top-0 start-50 translate-middle"
+				style="transform: translate(-50%, -50%);">
+				<img th:src="@{/images/JOYN.png}" alt="Logo"
+					class="rounded-circle border"
+					style="width: 88px; height: 88px; object-fit: cover; background: white; padding: 6px;">
+			</div>
+			<div class="card-body p-4 mt-4">
+			<div class="card-body p-4">
+				<h1 class="text-center">Register</h1>
+				<p class="text-center">Create your account to get started</p>
+				<div th:if="${message}"
+					class="alert alert-success alert-dismissible fade show"
+					role="alert">
+					<span th:text="${message}"></span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+
+				<div th:if="${error}"
+					class="alert alert-danger alert-dismissible fade show" role="alert">
+					<span th:text="${error}"></span>
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+				</div>
+
+
+				<form th:action="@{/register}" th:object="${userRegistrationDto}"
+					method="post">
+					<div class="mb-3">
+						<label for="username" class="form-label">Username</label> <input
+							type="text" class="form-control rounded-4"
+							placeholder="Enter username" th:field="*{username}"
+							th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : ''"
+							required>
+						<div th:if="${#fields.hasErrors('username')}"
+							class="invalid-feedback">
+							<span th:errors="*{username}"></span>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="email" class="form-label">Email</label> <input
+							type="email" class="form-control rounded-4" th:field="*{email}"
+							th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+							placeholder="Enter email" required>
+						<div th:if="${#fields.hasErrors('email')}"
+							class="invalid-feedback">
+							<span th:errors="*{email}"></span>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="password" class="form-label">Password</label> <input
+							type="password" class="form-control rounded-4"
+							th:field="*{password}"
+							th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : ''"
+							placeholder="Enter password" required>
+						<div th:if="${#fields.hasErrors('password')}"
+							class="invalid-feedback">
+							<span th:errors="*{password}"></span>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="confirmPassword" class="form-label">Confirm
+							Password</label> <input type="password" class="form-control rounded-4"
+							th:field="*{confirmPassword}"
+							th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : ''"
+							placeholder="Re-enter password" required>
+						<div th:if="${#fields.hasErrors('confirmPassword')}"
+							class="invalid-feedback">
+							<span th:errors="*{confirmPassword}"></span>
+						</div>
+					</div>
+
+					<button type="submit"
+						class="btn text-white rounded-4 p-2 mt-2 w-100"
+						style="background-color: #6f42c1;">Register</button>
+				</form>
+
+				<hr class="my-4">
+
+				<div class="text-center">
+					<p class="mb-0">
+						Already have an account? <a th:href="@{/login}"
+							class="text-decoration-none">Login</a>
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+<!-- 
+	<div class="fixed-bottom">
+		<div th:replace="~{fragments/footer :: footer}"></div>
+	</div>
+ -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

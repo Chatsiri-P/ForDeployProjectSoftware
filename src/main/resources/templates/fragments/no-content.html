@@ -1,0 +1,28 @@
+<section
+	th:fragment="noContent(iconClass, title, message, linkUrl, linkText)">
+	<div class="container p-2 w-100 text-center">
+		<div
+			class="bg-white border border-light-subtle rounded-4 shadow-sm mb-4 p-4">
+
+
+			<!-- Icon -->
+			<div class="mb-3">
+				<i th:class="${iconClass}" style="font-size: 3rem;"></i>
+			</div>
+
+			<!-- Title -->
+			<h4 th:text="${title}">Not Found</h4>
+
+			<!-- Message -->
+			<p th:text="${message}">No data found</p>
+
+			<!-- Optional Button -->
+			<a th:if="${linkUrl != null}" th:href="@{${linkUrl}}"
+				class="btn text-white rounded-4 p-2 mt-3" 
+				style="background-color: #6f42c1;"
+				sec:authorize="isAuthenticated()">
+				<div class="mx-4" th:text="${linkText}">Go somewhere</div>
+			</a>
+		</div>
+	</div>
+</section>

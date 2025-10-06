@@ -1,0 +1,94 @@
+<nav class="navbar navbar-fluid"
+	style="box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);" th:fragment="nav">
+	<ul class="navbar-nav me-auto ms-3 mb-2 mb-lg-0">
+		<li class="nav-item"><a class="nav-link" th:href="@{/}"> <img
+				th:src="@{/images/JOYN.png}" alt="Home" class="nav-icon" width="90"
+				height="90">
+		</a></li>
+	</ul>
+	<div class="d-flex gap-3">
+		<a class="text-decoration-none text-dark nav-card" th:href="@{/}">
+			<div
+				class="card rounded-4 px-3 p-2 d-flex flex-row align-items-center">
+				<i class="bi bi-house-door fs-5" style="font-size: 1.5rem;"></i> <span
+					class="ms-2">Home</span>
+			</div>
+		</a> <a class="text-decoration-none text-dark nav-card"
+			th:href="@{/categories}">
+			<div
+				class="card rounded-4 px-3 p-2 d-flex flex-row align-items-center">
+				<i class="bi bi-grid-3x3 fs-5" style="font-size: 1.5rem;"></i> <span
+					class="ms-2">Category</span>
+			</div>
+		</a> <a class="text-decoration-none text-dark nav-card"
+			th:href="@{/events/my-events}">
+			<div
+				class="card rounded-4 px-3 p-2 d-flex flex-row align-items-center">
+				<i class="bi bi-calendar4-event fs-5" style="font-size: 1.5rem;"></i>
+				<span class="ms-2">My Event</span>
+			</div>
+		</a> <a class="text-decoration-none text-dark nav-card"
+			th:href="@{/notifications}">
+			<div
+				class="card rounded-4 px-3 p-2 d-flex flex-row align-items-center">
+				<i class="bi bi-bell fs-5" style="font-size: 1.5rem;"></i> <span
+					class="ms-2">Notification</span>
+			</div>
+		</a>
+	</div>
+
+	<!-- User Profile Dropdown -->
+
+	<div class="d-flex gap-3 me-3 ms-auto mb-2 mb-lg-0 nav-card">
+		<div class="dropstart">
+			<button class="card rounded-4 px-3 p-2 d-flex flex-row align-items-center dropdown-toggle"
+				type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+				aria-expanded="false">
+					<i class="bi bi-person fs-5" style="font-size: 1.5rem;"></i>
+				</button>
+			<ul class="dropdown-menu p-2 me-2" aria-labelledby="dropdownMenuButton1">
+				<li><a class="dropdown-item rounded-2" th:href="@{/profile}"> 
+					<i class="bi bi-person me-2"></i> Profile
+				</a></li>
+				<li>
+					<form th:action="@{/logout}" method="post" class="d-inline">
+						<button class="dropdown-item rounded-2" type="submit">
+							<i class="bi bi-box-arrow-right me-2"></i> Logout
+						</button>
+					</form>
+				</li>
+			</ul>
+		</div>
+		<!-- 
+		<a class="text-decoration-none text-dark nav-card" th:href="@{/}">
+			<div
+				class="card rounded-circle p-2 px-3 d-flex flex-row align-items-center">
+				<i class="bi bi-person" style="font-size: 1.5rem;"></i>
+			</div>
+		</a>
+		 -->
+	</div>
+	<style>
+.nav-card .card {
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-card:hover .card {
+	border-color: #F0E9FF;
+	background-color: #F0E9FF;
+	color: #5E17EB;
+}
+
+.nav-card:hover i, .nav-card:hover span {
+	color: #921ffa;
+}
+
+.nav-card.active {
+	color: #921ffa;
+}
+
+nav {
+	background: white;
+}
+</style>
+</nav>

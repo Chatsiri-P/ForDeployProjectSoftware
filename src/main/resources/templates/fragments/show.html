@@ -1,0 +1,172 @@
+<section class="container my-4 p-2"
+	th:fragment="show(showTitle, iconClass, title, message, linkUrl, linkText)">
+	<h1 class="text-black p-2" th:text="${showTitle}">Title</h1>
+
+	<!-- No events -->
+	<section class="container my-4" th:if="${#lists.isEmpty(events)}">
+		<div
+			th:replace="fragments/no-content :: noContent(
+	        ${iconClass}, 
+	        ${title},
+	        ${message},
+			${linkUrl},
+	        ${linkText})">
+			</div>
+	</section>
+
+	<!-- List of events -->
+	<section class="container my-4" th:unless="${#lists.isEmpty(events)}">
+		<div class="row row-cols-1 row-cols-md-3 g-4">
+			<div th:each="event : ${statuses}" class="col-md-6 col-lg-4 mb-4">
+				<div class="card h-100 event-card">
+					<!-- Event Image -->
+					<div th:if="${event.event.imagePath}" class="card-img-top-container">
+						<img th:src="@{'/' + ${event.event.imagePath}}" class="card-img-top"
+							style="height: 200px; object-fit: cover;"
+							th:alt="${event.event.title}">
+					</div>
+					<div th:unless="${event.event.imagePath}"
+						class="bg-light d-flex align-items-center justify-content-center"
+						style="height: 200px;">
+						<i class="bi bi-calendar-event text-muted"
+							style="font-size: 3rem;"></i>
+					</div>
+					
+					<!-- Pill Bookmark -->
+					<div class="position-absolute top-0 end-0 m-3">
+						<form th:if="${!event.isBookmarked}"
+							th:action="@{/events/{id}/bookmark(id=${event.event.id})}"
+							method="post" class="d-inline">
+							<button type="submit" class="btn btn-sm"
+							style="background-color: white; border: 1px solid #ffc107; color: #ffc107;">
+								<i class="bi bi-bookmark"></i>
+							</button>
+						</form>
+						<form th:if="${event.isBookmarked}"
+							th:action="@{/events/{id}/unbookmark(id=${event.event.id})}"
+							method="post" class="d-inline">
+							<button type="submit" class="btn btn-warning btn-sm">
+								<i class="bi bi-bookmark-fill"></i>
+							</button>
+						</form>
+					</div>
+					
+					<!-- Content -->
+					<div class="card-body d-flex flex-column">
+						<h5 class="card-title" th:text="${event.event.title}"></h5>
+						<p class="card-text"
+						th:text="${#strings.abbreviate(event.event.description, 100)}">
+						</p>
+						
+						<div class="flex-grow-1"></div>
+						<div class="mb-2">
+							<small class="text-muted event-meta">
+								<i th:class="${event.event.category.iconClass}"></i> 
+								<span th:text="${event.event.category.name}"></span>
+							</small>
+						</div>
+						<div class="mb-2">
+							<small class="text-muted event-meta">
+								<i class="bi bi-geo-alt"></i> 
+								<span th:text="${event.event.location}"></span>
+							</small>
+						</div>
+						<div class="mb-2">
+							<small class="text-muted event-meta"> 
+								<i class="bi bi-person"></i> by 
+								<span th:text="${event.event.creator.username}"></span>
+							</small>
+						</div>
+						<div class="mb-3">
+							<small class="text-muted event-meta">
+								<i class="bi bi-people"></i> 
+								<span
+								th:text="${event.event.currentParticipants} + '/' + ${event.event.maxParticipants}">
+								</span>
+								participants
+							</small>
+							<div class="progress mt-1" style="height: 4px;">
+								<div 
+								class="progress-bar"
+								th:style="'width: ' + ${(event.event.currentParticipants * 100) / event.event.maxParticipants} + '%; background-color: #6f42c1;'">
+								</div>
+							</div>
+						</div>
+						
+						<div class="d-flex gap-2">
+							<a th:href="@{/events/{id}(id=${event.event.id})}"
+							class="btn text-white rounded-4 p-2 mt-3 w-75" 
+							style="background-color: #6f42c1;"> 
+								<i class="bi bi-eye me-1"></i> View Details
+							</a>
+	
+							<div sec:authorize="isAuthenticated()" 
+							class="d-flex flex-column w-25"
+							role="group">
+								<!-- Join Button -->
+								<form
+									th:if="${currentUser != null and event.event.creator.id != currentUser.id and !event.event.full and event.canJoin}"
+									th:action="@{/events/{id}/join(id=${event.event.id})}"
+									method="post" class="d-inline">
+									<button type="submit" 
+									class="btn text-white rounded-4 p-2 mt-3 w-100" 
+									style="background-color: #6f42c1;">
+										<i class="bi bi-person-plus"></i> Join
+									</button>
+								</form>
+								<span th:if="${event.event.full}"
+								class="btn rounded-4 p-2 mt-3 w-100 btn-outline-secondary disabled"> 
+									<i class="bi bi-exclamation-circle"></i> Full
+								</span>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<style>
+.text-truncate-1-line {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.nav-icon {
+	transition: transform 0.3s ease-in-out;
+}
+
+.nav-icon:hover {
+	transform: scale(1.02);
+}
+
+.card {
+	border: 1px solid #dee2e6;
+	transition: border-color 0.3s ease-in-out;
+}
+
+.card-img-top {
+	width: 100%;
+	height: 12vw;
+	object-fit: cover;
+}
+</style>
+
+	<script>
+        // Bookmark functionality
+        document.querySelectorAll('.btn-outline-secondary').forEach(button => {
+            button.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('bi-bookmark')) {
+                    icon.classList.remove('bi-bookmark', 'text-muted');
+                    icon.classList.add('bi-bookmark-fill', 'text-warning');
+                } else {
+                    icon.classList.remove('bi-bookmark-fill', 'text-warning');
+                    icon.classList.add('bi-bookmark', 'text-muted');
+                }
+            });
+        });
+    </script>
+</section>
